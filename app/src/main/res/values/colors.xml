@@ -1,0 +1,17 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<resources>
+    <color name="colorPrimary">@color/navy</color>
+    <color name="colorPrimaryDark">@color/sea_weed</color>
+    <color name="colorAccent">@color/red</color>
+
+    <color name="red">#e63946</color>
+    <color name="white">#f1faee</color>
+    <color name="lightBlue">#a8dadc</color>
+    <color name="sea">#457b9d</color>
+    <color name="sea_weed">#8F6845</color>
+    <color name="ocean">#215B80</color>
+    <color name="navy">#1d3557</color>
+    <color name="navy_grad">#243F68</color>
+    <color name="shadow">#50000000</color>
+</resources>
+

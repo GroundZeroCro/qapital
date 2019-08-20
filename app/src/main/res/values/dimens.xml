@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fragment_title">27sp</dimen>
+    <dimen name="mayor_padding">16dp</dimen>
+    <dimen name="normal_padding">12dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
+    <dimen name="goal_corner_radius">5dp</dimen>
+    <dimen name="goal_elevation">5dp</dimen>
+    <dimen name="subtitle_size">19sp</dimen>
+</resources>

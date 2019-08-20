@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/somethingOne"
+            android:enabled="true"
+            android:icon="@drawable/hamburger_menu_svg"
+            android:title="@string/something_one"
+            app:showAsAction="ifRoom" />
+
+    <item
+            android:id="@+id/somethingTwo"
+            android:enabled="true"
+            android:icon="@drawable/hamburger_menu_svg"
+            android:title="@string/something_two"
+            app:showAsAction="ifRoom" />
+
+    <group android:id="@+id/network">
+        <item
+                android:id="@+id/rateApplication"
+                android:enabled="true"
+                android:icon="@drawable/hamburger_menu_svg"
+                android:title="@string/rate_us"
+                app:showAsAction="ifRoom" />
+        <item
+                android:id="@+id/shareApplication"
+                android:enabled="true"
+                android:icon="@drawable/hamburger_menu_svg"
+                android:title="@string/share"
+                app:showAsAction="ifRoom" />
+    </group>
+
+    <group android:id="@+id/other">
+        <item
+                android:id="@+id/settingsFragment"
+                android:enabled="true"
+                android:icon="@drawable/hamburger_menu_svg"
+                android:title="@string/settings"
+                app:showAsAction="ifRoom" />
+        <item
+                android:id="@+id/aboutFragment"
+                android:enabled="true"
+                android:icon="@drawable/hamburger_menu_svg"
+                android:title="@string/about"
+                app:showAsAction="ifRoom" />
+    </group>
+</menu>
