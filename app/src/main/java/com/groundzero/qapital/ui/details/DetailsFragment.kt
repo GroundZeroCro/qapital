@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.groundzero.qapital.R
 import com.groundzero.qapital.base.BaseFragment
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_details.*
 
 class DetailsFragment : BaseFragment() {
 
@@ -20,6 +22,13 @@ class DetailsFragment : BaseFragment() {
         goalViewModel.getSelectedGoalLiveData().observe(viewLifecycleOwner, Observer { selectedGoal ->
             run {
                 getActivityCallback().changeToolbarTitle("${selectedGoal.name} goal")
+                details_title.text = selectedGoal.name
+                details_amount.text = resources.getString(R.string.details_amount, selectedGoal.targetAmount.toString())
+
+                Picasso.get().load(selectedGoal.image)
+                    .placeholder(R.drawable.sand_clock_svg)
+                    .error(R.drawable.error_image_svg)
+                    .into(details_image)
             }
         })
     }

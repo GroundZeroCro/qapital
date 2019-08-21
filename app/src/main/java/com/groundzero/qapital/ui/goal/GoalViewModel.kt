@@ -1,4 +1,4 @@
-package com.groundzero.qapital.ui.goals
+package com.groundzero.qapital.ui.goal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,7 +20,6 @@ class GoalViewModel @Inject constructor(private val goalRepository: GoalReposito
     private val selectedGoalLiveData = MutableLiveData<Goal>()
     private var disposable: Disposable = CompositeDisposable()
 
-    // TODO implement result
     fun getGoals(): LiveData<Response<Goal>> {
 
         goalsLiveData.value = Response.loading()

@@ -1,4 +1,4 @@
-package com.groundzero.qapital.ui.goals
+package com.groundzero.qapital.ui.goal
 
 import android.content.Context
 import android.view.LayoutInflater

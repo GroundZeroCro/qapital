@@ -5,13 +5,13 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.goals.GoalsFragment"
+        tools:context=".ui.goal.GoalsFragment"
         android:layout_marginTop="@dimen/mayor_padding"
         android:layout_marginLeft="@dimen/mayor_padding"
         android:layout_marginRight="@dimen/mayor_padding"
         app:cardBackgroundColor="@color/sea"
         app:cardCornerRadius="@dimen/goal_corner_radius"
-        app:cardElevation="@dimen/goal_elevation">
+        app:cardElevation="@dimen/large_elevation">
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

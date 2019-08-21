@@ -4,7 +4,7 @@
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
             app:startDestination="@id/goalsFragment">
 
-    <fragment android:id="@+id/goalsFragment" android:name="com.groundzero.qapital.ui.goals.GoalsFragment"
+    <fragment android:id="@+id/goalsFragment" android:name="com.groundzero.qapital.ui.goal.GoalsFragment"
               android:label="fragment_goals" tools:layout="@layout/fragment_goals">
         <action android:id="@+id/action_goalsFragment_to_detailsFragment" app:destination="@id/detailsFragment"/>
     </fragment>

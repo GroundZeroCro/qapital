@@ -11,7 +11,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:cardElevation="@dimen/goal_elevation"
+            app:cardElevation="@dimen/large_elevation"
             app:cardCornerRadius="0dp">
         <TextView
                 android:id="@+id/toolbar_title"
@@ -58,6 +58,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
-    android:elevation="@dimen/goal_elevation"/>
+            android:elevation="@dimen/large_elevation"
+    android:indeterminateTint="@color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
