@@ -62,9 +62,4 @@ class DetailsFragment : BaseFragment() {
 
             })
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        detailsViewModel.onDestroy()
-    }
 }

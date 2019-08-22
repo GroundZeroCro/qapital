@@ -1,5 +1,6 @@
 package com.groundzero.qapital.ui.details
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,7 +55,8 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewM
         return weekEarnings
     }
 
-    fun onDestroy() {
+    override fun onCleared() {
+        super.onCleared()
         disposable.clear()
     }
 }

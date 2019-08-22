@@ -54,9 +54,4 @@ class GoalsFragment : BaseFragment(), GoalRecyclerItem {
         super.onStart()
         activityCallback.changeToolbarTitle("Goals")
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        goalViewModel.onDestroy()
-    }
 }

@@ -36,7 +36,9 @@ class GoalViewModel(private val goalRepository: GoalRepository) : ViewModel() {
 
     fun getSelectedGoalLiveData(): LiveData<Goal> = selectedGoal
 
-    fun onDestroy() {
+
+    override fun onCleared() {
+        super.onCleared()
         disposable.dispose()
     }
 }
