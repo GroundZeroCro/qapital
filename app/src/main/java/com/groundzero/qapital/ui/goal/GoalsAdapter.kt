@@ -8,17 +8,23 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.groundzero.qapital.R
 import com.groundzero.qapital.data.goal.Goal
+import com.groundzero.qapital.utils.toCurrency
 import com.squareup.picasso.Picasso
 
 class GoalsAdapter(
     private val context: Context,
-    private val goals: List<Goal>,
+    private var goals: List<Goal>,
     private val goalRecyclerItem: GoalRecyclerItem
 ) :
     RecyclerView.Adapter<GoalsAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder =
-        CustomViewHolder(LayoutInflater.from(context), parent, goalRecyclerItem)
+        CustomViewHolder(LayoutInflater.from(context), parent, goalRecyclerItem, context)
+
+    fun updateRecyclerView(goals: List<Goal>) {
+        this.goals = goals
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int = goals.size
 
@@ -29,7 +35,8 @@ class GoalsAdapter(
     class CustomViewHolder(
         layoutInflater: LayoutInflater,
         parent: ViewGroup,
-        private val goalRecyclerItem: GoalRecyclerItem
+        private val goalRecyclerItem: GoalRecyclerItem,
+        private val context: Context
     ) :
         RecyclerView.ViewHolder(layoutInflater.inflate(R.layout.item_goal, parent, false)) {
 
@@ -44,7 +51,7 @@ class GoalsAdapter(
                 .error(R.drawable.error_image_svg)
                 .into(goalImage)
 
-            goalCosts.text = goal.targetAmount.toString()
+            goalCosts.text = context.resources.getString(R.string.amount, goal.targetAmount.toCurrency())
             goalTitle.text = goal.name
 
             itemView.setOnClickListener { goalRecyclerItem.onGoalClick(goal) }

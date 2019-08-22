@@ -25,7 +25,5 @@ open class BaseFragment : Fragment() {
         return recyclerView
     }
 
-    fun getActivityCallback(): MainActivityCallback {
-        return (activity as MainActivityCallback)
-    }
+    val activityCallback: MainActivityCallback get() = activity as MainActivityCallback
 }

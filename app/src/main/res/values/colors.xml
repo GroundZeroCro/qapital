@@ -13,5 +13,7 @@
     <color name="navy">#1d3557</color>
     <color name="navy_grad">#243F68</color>
     <color name="shadow">#50000000</color>
+    <color name="black">#000000</color>
+    <color name="green">#68B82C</color>
 </resources>
 

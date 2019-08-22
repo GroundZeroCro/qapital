@@ -23,7 +23,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_margin="@dimen/small_padding"
-            android:backgroundTint="@color/sea_weed"
             android:src="@drawable/plus_svg"
-    app:elevation="@dimen/large_elevation"/>
+            app:elevation="@dimen/large_elevation"
+            android:tint="@color/white"
+            android:backgroundTint="@color/sea_weed"
+            app:rippleColor="@color/ocean"
+            android:clickable="true"
+            android:focusable="true"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

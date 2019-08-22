@@ -16,28 +16,28 @@ import kotlinx.android.synthetic.main.fragment_goals.*
 
 class GoalsFragment : BaseFragment(), GoalRecyclerItem {
 
-    private lateinit var adapter: GoalsAdapter
+    private lateinit var goalsAdapter: GoalsAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_goals, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        inflater.inflate(R.layout.fragment_goals, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        goalsAdapter = GoalsAdapter(context!!, mutableListOf(), this)
+        adjustedRecyclerView(goals_recycler_view).adapter = goalsAdapter
 
         goalViewModel.getGoals().observe(viewLifecycleOwner, Observer { response ->
             run {
                 when (response.status) {
-                    Status.LOADING -> getActivityCallback().changeProgressBarVisibility(true)
+                    Status.LOADING -> activityCallback.changeProgressBarVisibility(true)
                     Status.SUCCESS -> {
-                        adapter = GoalsAdapter(context!!, response.listData!!, this)
-                        adjustedRecyclerView(goals_recycler_view).adapter = adapter;
-                        getActivityCallback().changeProgressBarVisibility(false)
+                        goalsAdapter.updateRecyclerView(response.listData!!)
+                        activityCallback.changeProgressBarVisibility(false)
                     }
                     Status.ERROR -> {
                         Toast.makeText(context, resources.getString(R.string.error_fetching_data), Toast.LENGTH_LONG)
                             .show()
-                        getActivityCallback().changeProgressBarVisibility(false)
+                        activityCallback.changeProgressBarVisibility(false)
                     }
                 }
             }
@@ -51,7 +51,7 @@ class GoalsFragment : BaseFragment(), GoalRecyclerItem {
 
     override fun onStart() {
         super.onStart()
-        getActivityCallback().changeToolbarTitle("Goals")
+        activityCallback.changeToolbarTitle("Goals")
     }
 
     override fun onDestroy() {
