@@ -10,9 +10,8 @@ import com.orhanobut.logger.Logger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class DetailsViewModel @Inject constructor(private val detailsRepository: DetailsRepository) : ViewModel() {
+class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewModel() {
 
     private lateinit var disposable: Disposable
     private val details = MutableLiveData<Response<Detail>>()

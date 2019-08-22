@@ -6,18 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.groundzero.qapital.R
 import com.groundzero.qapital.application.CustomApplication
 import com.groundzero.qapital.base.BaseFragment
 import com.groundzero.qapital.data.response.Status
+import com.groundzero.qapital.ui.goal.GoalViewModel
 import com.groundzero.qapital.utils.toCurrency
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
-import javax.inject.Inject
 
 class DetailsFragment : BaseFragment() {
 
-    @Inject
     lateinit var detailsViewModel: DetailsViewModel
 
     private lateinit var detailsAdapter: DetailsAdapter
@@ -32,6 +32,7 @@ class DetailsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        detailsViewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailsViewModel::class.java)
         detailsAdapter = DetailsAdapter(context!!, mutableListOf())
         adjustedRecyclerView(details_recycler_adapter).adapter = detailsAdapter
 

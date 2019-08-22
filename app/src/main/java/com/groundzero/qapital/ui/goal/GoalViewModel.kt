@@ -9,11 +9,10 @@ import com.groundzero.qapital.data.response.Response
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GoalViewModel @Inject constructor(private val goalRepository: GoalRepository) : ViewModel() {
+class GoalViewModel(private val goalRepository: GoalRepository) : ViewModel() {
 
     private val goals = MutableLiveData<Response<Goal>>()
     private val selectedGoal = MutableLiveData<Goal>()
