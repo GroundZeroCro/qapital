@@ -11,5 +11,4 @@ import javax.inject.Singleton
 @Component(modules = [ApplicationModule::class, RemoteModule::class])
 interface ApplicationComponent {
     fun inject(baseFragment: BaseFragment)
-    fun inject(detailsFragment: DetailsFragment)
 }

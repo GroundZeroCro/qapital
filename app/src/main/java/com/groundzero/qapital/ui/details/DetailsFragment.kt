@@ -14,8 +14,6 @@ import com.groundzero.qapital.R
 import com.groundzero.qapital.application.CustomApplication
 import com.groundzero.qapital.base.BaseFragment
 import com.groundzero.qapital.data.response.Status
-import com.groundzero.qapital.utils.toCurrency
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
 
 
@@ -23,11 +21,6 @@ class DetailsFragment : BaseFragment() {
 
     private lateinit var detailsViewModel: DetailsViewModel
     private lateinit var detailsAdapter: DetailsAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity!!.application as CustomApplication).getApplicationComponent().inject(this)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.fragment_details, container, false)
