@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.groundzero.qapital.R
 import com.groundzero.qapital.base.BaseFragment
 import com.groundzero.qapital.data.response.Status
+import com.groundzero.qapital.utils.toCurrency
 import kotlinx.android.synthetic.main.fragment_details.*
 
 
@@ -53,6 +54,12 @@ class DetailsFragment : BaseFragment() {
                         }
                     }
                 }
+            })
+
+        detailsViewModel.getWeekEarnings()
+            .observe(viewLifecycleOwner, Observer { weekEarnings ->
+                details_week_earnings.text = resources.getString(R.string.amount, weekEarnings.toCurrency())
+
             })
     }
 
