@@ -5,21 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.databinding.library.baseAdapters.BR.goal
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.groundzero.qapital.R
 import com.groundzero.qapital.application.CustomApplication
 import com.groundzero.qapital.base.BaseFragment
 import com.groundzero.qapital.data.response.Status
-import com.groundzero.qapital.ui.goal.GoalViewModel
 import com.groundzero.qapital.utils.toCurrency
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
 
+
 class DetailsFragment : BaseFragment() {
 
-    lateinit var detailsViewModel: DetailsViewModel
-
+    private lateinit var detailsViewModel: DetailsViewModel
     private lateinit var detailsAdapter: DetailsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,28 +29,21 @@ class DetailsFragment : BaseFragment() {
         (activity!!.application as CustomApplication).getApplicationComponent().inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_details, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.fragment_details, container, false)
+        binding.setVariable(goal, goalViewModel.getSelectedGoalLiveData().value)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         detailsViewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailsViewModel::class.java)
         detailsAdapter = DetailsAdapter(context!!, mutableListOf())
         adjustedRecyclerView(details_recycler_adapter).adapter = detailsAdapter
+        activityCallback.changeToolbarTitle("${goalViewModel.getSelectedGoalLiveData().value!!.name} goal")
 
-        goalViewModel.getSelectedGoalLiveData().observe(viewLifecycleOwner, Observer { selectedGoal ->
-            run {
-                activityCallback.changeToolbarTitle("${selectedGoal.name} goal")
-                details_title.text = selectedGoal.name
-                details_amount.text = resources.getString(R.string.amount, selectedGoal.targetAmount.toCurrency())
-
-                Picasso.get().load(selectedGoal.image)
-                    .placeholder(R.drawable.sand_clock_svg)
-                    .error(R.drawable.error_image_svg)
-                    .into(details_image)
-            }
-
-            detailsViewModel.getDetails(selectedGoal.id).observe(viewLifecycleOwner, Observer { response ->
+        detailsViewModel.getDetails(goalViewModel.getSelectedGoalLiveData().value!!.id)
+            .observe(viewLifecycleOwner, Observer { response ->
                 run {
                     when (response.status) {
                         Status.LOADING -> activityCallback.changeProgressBarVisibility(true)
@@ -67,7 +62,6 @@ class DetailsFragment : BaseFragment() {
                     }
                 }
             })
-        })
     }
 
     override fun onDestroy() {
