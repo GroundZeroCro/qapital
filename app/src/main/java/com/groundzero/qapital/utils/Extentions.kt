@@ -3,8 +3,6 @@ package com.groundzero.qapital.utils
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,10 +18,29 @@ fun String.toSpanned(): Spanned {
 fun Float.toCurrency(): String {
     return String.format("%.2f", this)
 }
-// TODO finish parsing this date into right timestamp for DetailsFragment
+
 fun String.toTimestamp(): String {
+    // Time format received in response
     val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
-    val calendar = Calendar.getInstance()
-    calendar.time = simpleDateFormat.parse(this)
-    return calendar.get(Calendar.HOUR).toString()
+    // Seconds passed since now and post date
+    val time: Int = ((System.currentTimeMillis() - simpleDateFormat.parse(this).time) / 1000).toInt()
+
+    val secondsInYear = 365 * 24 * 60 * 60
+    val secondsInDay = 24 * 60 * 60
+    val secondsInHour = 60 * 60
+    val secondsInMinute = 60
+
+    val yearsSince = time / secondsInYear
+    val daysSince = time % secondsInYear / secondsInDay
+    val hoursSince = time % secondsInYear % secondsInDay / secondsInHour
+    val minutesSince = time % secondsInYear % secondsInDay % secondsInHour / secondsInMinute
+    val seconds = time % secondsInYear % secondsInDay % secondsInHour % secondsInMinute
+    // Removing 0 values from the timestamp
+    var timestamp = ""
+    if (yearsSince != 0) timestamp += "$yearsSince" + "y "
+    if (daysSince != 0) timestamp += "$daysSince" + "d "
+    if (hoursSince != 0) timestamp += "$hoursSince" + "h "
+    if (minutesSince != 0) timestamp += "$minutesSince" + "m "
+    timestamp += "$seconds" + "s"
+    return timestamp
 }

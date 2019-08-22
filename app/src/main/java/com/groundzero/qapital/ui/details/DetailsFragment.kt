@@ -11,7 +11,6 @@ import androidx.databinding.library.baseAdapters.BR.goal
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.groundzero.qapital.R
-import com.groundzero.qapital.application.CustomApplication
 import com.groundzero.qapital.base.BaseFragment
 import com.groundzero.qapital.data.response.Status
 import kotlinx.android.synthetic.main.fragment_details.*

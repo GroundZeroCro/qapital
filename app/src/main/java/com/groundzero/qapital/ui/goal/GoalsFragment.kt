@@ -30,17 +30,17 @@ class GoalsFragment : BaseFragment(), GoalRecyclerItem {
         goalViewModel.getGoals().observe(viewLifecycleOwner, Observer { response ->
             run {
                 when (response.status) {
-                    Status.LOADING -> activityCallback.changeProgressBarVisibility(true)
-                    Status.SUCCESS -> {
-                        goalsAdapter.updateRecyclerView(response.listData!!)
-                        activityCallback.changeProgressBarVisibility(false)
-                    }
-                    Status.ERROR -> {
-                        Toast.makeText(context, resources.getString(R.string.error_fetching_data), Toast.LENGTH_LONG)
-                            .show()
-                        activityCallback.changeProgressBarVisibility(false)
-                    }
+                Status.LOADING -> activityCallback.changeProgressBarVisibility(true)
+                Status.SUCCESS -> {
+                    goalsAdapter.updateRecyclerView(response.listData!!)
+                    activityCallback.changeProgressBarVisibility(false)
                 }
+                Status.ERROR -> {
+                    Toast.makeText(context, resources.getString(R.string.error_fetching_data), Toast.LENGTH_LONG)
+                        .show()
+                    activityCallback.changeProgressBarVisibility(false)
+                }
+            }
             }
         })
     }
