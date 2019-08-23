@@ -6,7 +6,7 @@ import android.text.Spanned
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
+private val simpleDateFormat = SimpleDateFormat(responseDateFormat, Locale.ENGLISH)
 
 // Time format received in response
 fun String.toSpanned(): Spanned {
@@ -19,7 +19,7 @@ fun String.toSpanned(): Spanned {
 }
 
 fun Float.toCurrency(): String {
-    return String.format("%.2f", this)
+    return "$"+String.format("%.2f", this)
 }
 
 fun String.secondsPassed(): Int {

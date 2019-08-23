@@ -18,7 +18,7 @@ class DetailsAdapter(
     RecyclerView.Adapter<DetailsAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder =
-        CustomViewHolder(LayoutInflater.from(context), parent, context)
+        CustomViewHolder(LayoutInflater.from(context), parent)
 
     fun updateRecyclerView(details: List<Detail>) {
         this.details = details
@@ -34,8 +34,7 @@ class DetailsAdapter(
 
     class CustomViewHolder(
         layoutInflater: LayoutInflater,
-        parent: ViewGroup,
-        private val context: Context
+        parent: ViewGroup
     ) :
         RecyclerView.ViewHolder(layoutInflater.inflate(R.layout.item_detail, parent, false)) {
 
@@ -46,7 +45,7 @@ class DetailsAdapter(
         fun bind(detail: Detail) {
             detailDescription.text = detail.message.toSpanned()
             detailTime.text = detail.timestamp.toTimestamp()
-            detailAmount.text = context.resources.getString(R.string.amount, detail.amount.toCurrency())
+            detailAmount.text = detail.amount.toCurrency()
         }
     }
 }

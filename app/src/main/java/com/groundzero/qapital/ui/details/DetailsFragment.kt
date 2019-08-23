@@ -58,7 +58,7 @@ class DetailsFragment : BaseFragment() {
 
         detailsViewModel.getWeekEarnings()
             .observe(viewLifecycleOwner, Observer { weekEarnings ->
-                details_week_earnings.text = resources.getString(R.string.amount, weekEarnings.toCurrency())
+                details_week_earnings.text = weekEarnings.toCurrency()
 
             })
     }

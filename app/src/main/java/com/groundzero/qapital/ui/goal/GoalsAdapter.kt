@@ -51,7 +51,7 @@ class GoalsAdapter(
                 .error(R.drawable.error_image_svg)
                 .into(goalImage)
 
-            goalCosts.text = context.resources.getString(R.string.amount, goal.targetAmount.toCurrency())
+            goalCosts.text = goal.targetAmount.toCurrency()
             goalTitle.text = goal.name
 
             itemView.setOnClickListener { goalRecyclerItem.onGoalClick(goal) }

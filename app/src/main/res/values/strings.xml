@@ -14,7 +14,6 @@
     <string name="something_one_clicked">Something one is clicked</string>
     <string name="something_two_clicked">Something two is clicked</string>
     <string name="error_fetching_data">Unable to fetch data at this moment. Try again later.</string>
-    <string name="amount">$%1$s</string>
     <string name="your_rules">Your rules:</string>
     <string name="details_this_week">Last 7 days -\t</string>
 </resources>
