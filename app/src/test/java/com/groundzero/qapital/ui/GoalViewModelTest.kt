@@ -4,7 +4,9 @@ import com.groundzero.qapital.base.BaseViewModelTest
 import com.groundzero.qapital.data.goal.Goal
 import com.groundzero.qapital.data.goal.GoalRepository
 import com.groundzero.qapital.data.goal.Goals
+import com.groundzero.qapital.data.response.Response
 import com.groundzero.qapital.ui.goal.GoalViewModel
+import com.groundzero.qapital.utils.responseDateFormat
 import io.reactivex.Single
 import junit.framework.Assert.assertEquals
 import org.junit.Before
@@ -12,6 +14,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -19,6 +22,9 @@ class GoalViewModelTest : BaseViewModelTest() {
 
     @Mock
     lateinit var goalRepository: GoalRepository
+    @Mock
+    lateinit var response: Response<Goal>
+
     private lateinit var goalViewModel: GoalViewModel
     private val goal = Goal("", 0, 0.0f, 0.0f, ",", "", 0, mutableListOf())
 

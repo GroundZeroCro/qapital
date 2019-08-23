@@ -20,12 +20,14 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewM
     private var disposable = CompositeDisposable()
     private val details = MutableLiveData<Response<Detail>>()
     private val weekEarnings = MutableLiveData<Float>()
+    private val totalEarnings = MutableLiveData<Float>()
 
     fun getDetails(goalId: Int): LiveData<Response<Detail>> {
         details.value = Response.loading()
         val detailsObserver: Single<Details> = detailsRepository.getDetails(goalId)
         disposable.add(getDetailsFeed(detailsObserver))
         disposable.add(getWeeklyEarningsObserver(detailsObserver))
+        disposable.add(getTotalEarningsObserver(detailsObserver))
         return details
     }
 
@@ -46,7 +48,7 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewM
                     .sum()
             }
             .subscribeOn(Schedulers.io())
-            .doOnError { e -> details.value = Response.error(e.fillInStackTrace()) }
+            .doOnError { weekEarnings.value = 0.0f }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { weekEarnings -> this.weekEarnings.value = weekEarnings },
@@ -54,8 +56,49 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewM
             )
     }
 
+    private fun getTotalEarningsObserver(detailsObserver: Single<Details>): Disposable {
+        return detailsObserver
+            .map { t: Details ->
+                t.details
+                    .map { detail -> detail.amount }
+                    .sum()
+            }
+            .subscribeOn(Schedulers.io())
+            .doOnError { totalEarnings.value = 0.0f }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { totalEarnings -> onSuccessTotalEarnings(totalEarnings) },
+                { onErrorTotalEarnings() }
+            )
+    }
+
+    /**
+     * Earnings text and progress bar are being animated.
+     */
+    private fun onSuccessTotalEarnings(totalEarnings: Float) {
+        Thread {
+            var earningsIterator = 0.0f
+            for (x in 0..totalEarnings.toInt()) {
+                Thread.sleep(30)
+                this.totalEarnings.postValue(earningsIterator++)
+            }
+        }.start()
+    }
+
+    private fun onErrorTotalEarnings() {
+        this.totalEarnings.value = 0.0f
+    }
+
+    fun getTotalEarningsProgression(totalEarnings: Float, targetEarnings: Float): Int {
+        return ((totalEarnings / targetEarnings) * 100).toInt()
+    }
+
     fun getWeekEarnings(): LiveData<Float> {
         return weekEarnings
+    }
+
+    fun getTotalEarnings(): LiveData<Float> {
+        return totalEarnings
     }
 
     override fun onCleared() {

@@ -42,7 +42,6 @@
                 android:id="@+id/details_amount"
                 app:layout_constraintBottom_toTopOf="@id/progress"
                 app:layout_constraintLeft_toLeftOf="@id/details_image"
-                android:text="@{`$`+goal.targetAmount}"
                 android:textSize="@dimen/details_subtitle"
                 android:textColor="@color/white"
                 android:paddingStart="@dimen/mayor_padding"
@@ -59,7 +58,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:max="100"
-                android:progress="45"
+                android:progress="0"
                 android:padding="@dimen/mayor_padding"
                 android:progressBackgroundTint="@color/white"
                 android:progressTint="@color/white"/>

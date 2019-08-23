@@ -1,5 +1,6 @@
 package com.groundzero.qapital.ui.details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.groundzero.qapital.R
 import com.groundzero.qapital.base.BaseFragment
+import com.groundzero.qapital.data.goal.Goal
 import com.groundzero.qapital.data.response.Status
 import com.groundzero.qapital.utils.toCurrency
 import kotlinx.android.synthetic.main.fragment_details.*
@@ -21,16 +23,29 @@ class DetailsFragment : BaseFragment() {
 
     private lateinit var detailsViewModel: DetailsViewModel
     private lateinit var detailsAdapter: DetailsAdapter
+    private lateinit var selectedGoal: Goal
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.fragment_details, container, false)
-        binding.setVariable(goal, goalViewModel.getSelectedGoalLiveData().value)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            inflater,
+            R.layout.fragment_details,
+            container,
+            false
+        )
+        selectedGoal = goalViewModel.getSelectedGoalLiveData().value!!
+        binding.setVariable(goal, selectedGoal)
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        detailsViewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailsViewModel::class.java)
+        detailsViewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(DetailsViewModel::class.java)
         detailsAdapter = DetailsAdapter(context!!, mutableListOf())
         adjustedRecyclerView(details_recycler_adapter).adapter = detailsAdapter
         activityCallback.changeToolbarTitle("${goalViewModel.getSelectedGoalLiveData().value!!.name} goal")
@@ -60,6 +75,15 @@ class DetailsFragment : BaseFragment() {
             .observe(viewLifecycleOwner, Observer { weekEarnings ->
                 details_week_earnings.text = weekEarnings.toCurrency()
 
+            })
+
+        detailsViewModel.getTotalEarnings()
+            .observe(viewLifecycleOwner, Observer { totalEarnings ->
+                details_amount.text = "${totalEarnings.toCurrency()} / ${selectedGoal.targetAmount}"
+                progress.progress = detailsViewModel.getTotalEarningsProgression(
+                    totalEarnings,
+                    selectedGoal.targetAmount
+                )
             })
     }
 }
