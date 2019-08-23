@@ -1,6 +1,6 @@
 package com.groundzero.qapital.ui
 
-import com.groundzero.qapital.core.BaseTest
+import com.groundzero.qapital.base.BaseViewModelTest
 import com.groundzero.qapital.data.details.Detail
 import com.groundzero.qapital.data.details.Details
 import com.groundzero.qapital.data.details.DetailsRepository
@@ -13,7 +13,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 
-class DetailsViewModelTest : BaseTest() {
+class DetailsViewModelTest : BaseViewModelTest() {
 
     @Mock
     lateinit var detailsRepository: DetailsRepository
@@ -25,7 +25,7 @@ class DetailsViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `fetched data should be equal to live data value`() {
+    fun `fetched data size should be equal to live data value size`() {
         val detail = Detail("", "", FEED_TIMESTAMP, "", 0.0f, 0, 2)
         val details = Details(mutableListOf(detail, detail))
         `when`(detailsRepository.getDetails(ArgumentMatchers.anyInt())).thenReturn(Single.just(details))

@@ -1,6 +1,6 @@
 package com.groundzero.qapital.ui
 
-import com.groundzero.qapital.core.BaseTest
+import com.groundzero.qapital.base.BaseViewModelTest
 import com.groundzero.qapital.data.goal.Goal
 import com.groundzero.qapital.data.goal.GoalRepository
 import com.groundzero.qapital.data.goal.Goals
@@ -13,13 +13,12 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 
 
-class GoalViewModelTest : BaseTest() {
+class GoalViewModelTest : BaseViewModelTest() {
 
     @Mock
     lateinit var goalRepository: GoalRepository
-
-
     private lateinit var goalViewModel: GoalViewModel
+    private val goal = Goal("", 0, 0.0f, 0.0f, ",", "", 0, mutableListOf())
 
     @Before
     fun setUp() {
@@ -28,14 +27,12 @@ class GoalViewModelTest : BaseTest() {
 
     @Test
     fun `selected live data value should be equal to selected goal`() {
-        val goal = Goal("", 0, 0.0f, 0.0f, ",", "", 0, mutableListOf())
         goalViewModel.setSelectedGoalLiveData(goal)
         assertEquals("Should be equal", goal, goalViewModel.getSelectedGoalLiveData().value)
     }
 
     @Test
-    fun `fetched data should be equal to live data value`() {
-        val goal = Goal("", 0, 0.0f, 0.0f, ",", "", 0, mutableListOf())
+    fun `fetched data size should be equal to live data value size`() {
         val goals = Goals(mutableListOf(goal, goal, goal))
         `when`(goalRepository.getGoals()).thenReturn(Single.just(goals))
         assertEquals("Is equal", goalViewModel.getGoals().value!!.listData!!.size, 3)
