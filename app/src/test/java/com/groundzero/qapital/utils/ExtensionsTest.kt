@@ -8,7 +8,7 @@ import java.util.*
 class ExtensionsTest {
 
     @Test
-    fun `timestamp should equal true`() {
+    fun `timestamp should be equal`() {
         val differenceFromNowInSeconds = secondsInMinute - 1
         assertEquals(
             getDateFormatted(differenceFromNowInSeconds).toTimestamp(),
@@ -17,7 +17,7 @@ class ExtensionsTest {
     }
 
     @Test
-    fun `should return string with a currency sign`() {
+    fun `currency extension should return equal`() {
         val amount = 2.0f
         assertEquals("Is equal", amount.toCurrency(), "$2,00")
     }

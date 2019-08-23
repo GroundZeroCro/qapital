@@ -41,7 +41,6 @@ class DetailsFragment : BaseFragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         detailsViewModel =
@@ -78,7 +77,7 @@ class DetailsFragment : BaseFragment() {
 
         detailsViewModel.getTotalEarnings()
             .observe(viewLifecycleOwner, Observer { totalEarnings ->
-                details_amount.text = "${totalEarnings.toCurrency()} / ${selectedGoal.targetAmount}"
+                details_amount.text = resources.getString(R.string.details_amount,totalEarnings.toCurrency(), selectedGoal.targetAmount.toCurrency())
                 progress.progress = detailsViewModel.getTotalEarningsProgression(
                     totalEarnings,
                     selectedGoal.targetAmount

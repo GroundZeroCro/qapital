@@ -16,4 +16,5 @@
     <string name="error_fetching_data">Unable to fetch data at this moment. Try again later.</string>
     <string name="your_rules">Your rules:</string>
     <string name="details_this_week">Last 7 days -\t</string>
+    <string name="details_amount">%1$s/%2$s</string>
 </resources>

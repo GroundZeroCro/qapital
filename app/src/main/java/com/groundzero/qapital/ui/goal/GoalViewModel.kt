@@ -1,5 +1,6 @@
 package com.groundzero.qapital.ui.goal
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,9 +25,17 @@ class GoalViewModel(private val goalRepository: GoalRepository) : ViewModel() {
 
         disposable = goalRepository.getGoals()
             .subscribeOn(Schedulers.io())
-            .doOnError { e -> goals.value = Response.error(e.fillInStackTrace()) }
+            .doOnError { e ->
+                run {
+                    goals.value = Response.error(e.fillInStackTrace())
+                    Log.d("mogger", "ERROR")
+                }
+            }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { response -> goals.value = Response.success(response.savingsGoals) }
+            .subscribe(
+                { response -> goals.value = Response.success(response.savingsGoals) },
+                { throwable: Throwable? -> goals.value = Response.error(throwable!!) }
+            )
         return goals
     }
 
