@@ -1,0 +1,38 @@
+package com.groundzero.qapital.ui
+
+import com.groundzero.qapital.core.BaseTest
+import com.groundzero.qapital.data.details.Detail
+import com.groundzero.qapital.data.details.Details
+import com.groundzero.qapital.data.details.DetailsRepository
+import com.groundzero.qapital.ui.details.DetailsViewModel
+import io.reactivex.Single
+import junit.framework.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
+import org.mockito.ArgumentMatchers
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+
+class DetailsViewModelTest : BaseTest() {
+
+    @Mock
+    lateinit var detailsRepository: DetailsRepository
+    private lateinit var detailsViewModel: DetailsViewModel
+
+    @Before
+    fun setUp() {
+        detailsViewModel = DetailsViewModel(detailsRepository)
+    }
+
+    @Test
+    fun `fetched data should be equal to live data value`() {
+        val detail = Detail("", "", FEED_TIMESTAMP, "", 0.0f, 0, 2)
+        val details = Details(mutableListOf(detail, detail))
+        `when`(detailsRepository.getDetails(ArgumentMatchers.anyInt())).thenReturn(Single.just(details))
+        assertEquals("Is equal", detailsViewModel.getDetails(1).value!!.listData!!.size, 2)
+    }
+
+    companion object {
+        const val FEED_TIMESTAMP = "2015-03-10T14:55:16.025Z"
+    }
+}
