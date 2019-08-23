@@ -5,6 +5,7 @@ import com.groundzero.qapital.data.details.Detail
 import com.groundzero.qapital.data.details.Details
 import com.groundzero.qapital.data.details.DetailsRepository
 import com.groundzero.qapital.ui.details.DetailsViewModel
+import com.groundzero.qapital.utils.ExtensionsTest
 import io.reactivex.Single
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertFalse
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.anyInt
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -22,6 +24,9 @@ class DetailsViewModelTest : BaseViewModelTest() {
     @Mock
     lateinit var detailsRepository: DetailsRepository
     private lateinit var detailsViewModel: DetailsViewModel
+    private val detail = Detail(
+        "", "", "", "", 0.0f, 0, 0
+    )
 
     @Before
     fun setUp() {
@@ -30,18 +35,42 @@ class DetailsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `fetched data size should be equal to live data value size`() {
-        val detail = Detail("", "", FEED_TIMESTAMP, "", 0.0f, 0, 2)
+        // Getting date formatted from more then a week old date
+        detail.timestamp = ExtensionsTest.getDateFormatted(10000000)
         val details = Details(mutableListOf(detail, detail))
         `when`(detailsRepository.getDetails(ArgumentMatchers.anyInt())).thenReturn(
             Single.just(
                 details
             )
         )
-        assertEquals("Is equal", detailsViewModel.getDetails(1).value!!.listData!!.size, 2)
+        detailsViewModel.getDetails(1)
+        assertEquals("Is equal", 2, detailsViewModel.getDetails(1).value!!.listData!!.size)
+        detail.timestamp = ""
     }
 
     @Test
-    fun `returns percentage of two floats as true`() {
+    fun `fetch past week earnings should be equal`() {
+        // Formatted date from 59 seconds past
+        detail.timestamp = ExtensionsTest.getDateFormatted(59)
+        detail.amount = 2.0f
+        val details = Details(mutableListOf(detail, detail))
+        `when`(detailsRepository.getDetails(ArgumentMatchers.anyInt())).thenReturn(
+            Single.just(
+                details
+            )
+        )
+        detailsViewModel.getDetails(ArgumentMatchers.anyInt())
+        assertEquals(
+            "Is same value",
+            4.0f,
+            detailsViewModel.getWeekEarnings().value
+        )
+        detail.timestamp = ""
+        detail.amount = 0.0f
+    }
+
+    @Test
+    fun `returns percentage of two floats as equal`() {
         assertEquals(
             "Is equal",
             detailsViewModel.getTotalEarningsProgression(30.0f, 100.0f),
@@ -54,9 +83,5 @@ class DetailsViewModelTest : BaseViewModelTest() {
         assertFalse(
             detailsViewModel.getTotalEarningsProgression(30.0f, 100.0f) == 31
         )
-    }
-
-    companion object {
-        const val FEED_TIMESTAMP = "2015-03-10T14:55:16.025Z"
     }
 }
