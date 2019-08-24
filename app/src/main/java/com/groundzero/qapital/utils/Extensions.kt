@@ -8,7 +8,6 @@ import java.util.*
 
 private val simpleDateFormat = SimpleDateFormat(responseDateFormat, Locale.ENGLISH)
 
-// Time format received in response
 fun String.toSpanned(): Spanned {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)

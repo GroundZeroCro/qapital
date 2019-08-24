@@ -47,11 +47,8 @@ class GoalViewModel(
 
     fun onGoalsFetchError(throwable: Throwable?) {
         val cachedGoals: Goals? = getCachedData()
-        if (cachedGoals != null) {
-            goals.value = Response.success(cachedGoals.savingsGoals)
-        } else {
-            goals.value = Response.error(throwable!!)
-        }
+        if (cachedGoals != null) goals.value = Response.success(cachedGoals.savingsGoals)
+        else goals.value = Response.error(throwable!!)
     }
 
     override fun getCachedData(): Goals? {
