@@ -27,7 +27,7 @@ data class Goal(
     var connectedUsers: List<Int>
 )
 
-@BindingAdapter("android:src")
+@BindingAdapter("android:source")
 fun loadImage(view: ImageView, imageUrl: String) {
     Picasso.get().load(imageUrl)
         .placeholder(com.groundzero.qapital.R.drawable.sand_clock_svg)

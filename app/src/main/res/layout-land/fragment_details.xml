@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+                name="goal"
+                type="com.groundzero.qapital.data.remote.goal.Goal" />
+    </data>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            <ImageView
+                    android:id="@+id/details_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    android:source="@{goal.image}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/details_rules_list_navigation_parent"/>
+
+            <TextView
+                    android:id="@+id/details_title"
+                    style="@style/TitleShadow"
+                    fontPath="@string/title_font"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/mayor_padding"
+                    android:text="@{goal.name}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/details_title"
+                    app:layout_constraintBottom_toTopOf="@id/details_amount"
+                    app:layout_constraintLeft_toLeftOf="@id/details_image"
+                    tools:ignore="MissingPrefix" />
+
+            <TextView
+                    android:id="@+id/details_amount"
+                    style="@style/TitleShadow"
+                    fontPath="@string/title_font"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/mayor_padding"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/details_subtitle"
+                    app:layout_constraintBottom_toTopOf="@id/progress"
+                    app:layout_constraintLeft_toLeftOf="@id/details_image"
+                    tools:ignore="MissingPrefix" />
+
+            <ProgressBar
+                    android:id="@+id/progress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:max="100"
+                    android:padding="@dimen/mayor_padding"
+                    android:progress="0"
+                    android:progressBackgroundTint="@color/white"
+                    android:progressTint="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/details_image" />
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/details_rules_list_navigation_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/sea_weed"
+                    android:orientation="horizontal"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="@dimen/medium_elevation"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/details_week_earnings_parent">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/mayor_padding">
+
+                    <TextView
+                            style="@style/TitleShadow"
+                            fontPath="@string/title_font"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/your_rules"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/subtitle_size"
+                            tools:ignore="MissingPrefix" />
+
+                    <ListView
+                            android:id="@+id/details_rules_list"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                    android:id="@+id/details_week_earnings_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/lightBlue"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/mayor_padding"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                        fontPath="@string/title_font"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/details_this_week"
+                        android:textColor="@color/sea"
+                        android:textSize="@dimen/subtitle_size" />
+
+                <TextView
+                        android:id="@+id/details_week_earnings"
+                        fontPath="@string/title_font"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Example"
+                        android:textColor="@color/ocean"
+                        android:textSize="@dimen/subtitle_size" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/details_recycler_adapter"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_week_earnings_parent" />
+
+    </LinearLayout>
+
+
+</layout>

@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         nav_view.setNavigationItemSelectedListener(this)
-        menu_button.setOnClickListener{ main_drawer.openDrawer(GravityCompat.START) }
+        menu_button.setOnClickListener { main_drawer.openDrawer(GravityCompat.START) }
 
         disposables.add(
             titleSubject.subscribeOn(Schedulers.io())
@@ -39,7 +39,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         disposables.add(
             progressBarSubject.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { isVisible -> progress_bar.visibility = if (isVisible) View.VISIBLE else View.GONE }
+                .subscribe { isVisible ->
+                    progress_bar.visibility = if (isVisible) View.VISIBLE else View.GONE
+                }
         )
     }
 
@@ -58,10 +60,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         menuItem.isChecked = true
         main_drawer.closeDrawers()
-        if (menuItem.itemId == R.id.somethingOne) {
-            showToast(resources.getString(R.string.something_one_clicked))
-        } else if (menuItem.itemId == R.id.somethingTwo) {
-            showToast(resources.getString(R.string.something_two_clicked))
+        when {
+            menuItem.itemId == R.id.rateApplication -> showToast(resources.getString(R.string.rate_application))
+            menuItem.itemId == R.id.shareApplication -> showToast(resources.getString(R.string.share_application))
+            menuItem.itemId == R.id.settingsFragment -> showToast(resources.getString(R.string.settings_fragment))
+            menuItem.itemId == R.id.aboutFragment -> showToast(resources.getString(R.string.about_fragment))
         }
         return true
     }
