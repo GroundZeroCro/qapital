@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.groundzero.qapital.data.cache.Cache
 import com.groundzero.qapital.data.persistence.goal.GoalDao
 import com.groundzero.qapital.data.remote.goal.Goal
 import com.groundzero.qapital.data.remote.goal.GoalRepository
@@ -18,7 +19,7 @@ import javax.inject.Singleton
 class GoalViewModel(
     private val goalRepository: GoalRepository,
     private val goalDao: GoalDao
-) : ViewModel() {
+) : ViewModel(), Cache<Goals> {
 
     private val goals = MutableLiveData<Response<Goal>>()
     private val selectedGoal = MutableLiveData<Goal>()
@@ -33,27 +34,31 @@ class GoalViewModel(
             .doOnError { e -> Log.e("errors", e.message) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { response ->
-                    goals.value = Response.success(response.savingsGoals)
-                    cacheGoals(Goals(response.savingsGoals))
-                },
-                { throwable: Throwable? ->
-                    val cachedGoals: Goals? = getCachedGoals()
-                    if (cachedGoals != null) {
-                        goals.value = Response.success(cachedGoals.savingsGoals)
-                    } else {
-                        goals.value = Response.error(throwable!!)
-                    }
-                }
+                { response -> onGoalsFetchSuccess(response) },
+                { throwable: Throwable? -> onGoalsFetchError(throwable) }
             )
         return goals
     }
 
-    private fun getCachedGoals(): Goals {
+    fun onGoalsFetchSuccess(response: Goals) {
+        goals.value = Response.success(response.savingsGoals)
+        cacheData(Goals(response.savingsGoals))
+    }
+
+    fun onGoalsFetchError(throwable: Throwable?) {
+        val cachedGoals: Goals? = getCachedData()
+        if (cachedGoals != null) {
+            goals.value = Response.success(cachedGoals.savingsGoals)
+        } else {
+            goals.value = Response.error(throwable!!)
+        }
+    }
+
+    override fun getCachedData(): Goals? {
         return goalDao.getGoals()
     }
 
-    private fun cacheGoals(goals: Goals) {
+    override fun cacheData(goals: Goals) {
         goalDao.addGoals(goals)
     }
 
