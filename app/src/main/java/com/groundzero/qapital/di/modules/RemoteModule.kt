@@ -2,8 +2,8 @@ package com.groundzero.qapital.di.modules
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.groundzero.qapital.data.details.DetailsApi
-import com.groundzero.qapital.data.goal.GoalApi
+import com.groundzero.qapital.data.remote.details.DetailsApi
+import com.groundzero.qapital.data.remote.goal.GoalApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

@@ -1,13 +1,18 @@
-package com.groundzero.qapital.data.goal
+package com.groundzero.qapital.data.remote.goal
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.squareup.picasso.Picasso
 
+@Entity(tableName = "goals")
 data class Goals(
     @SerializedName("savingsGoals")
-    var savingsGoals: List<Goal>
+    var savingsGoals: List<Goal>,
+    @PrimaryKey(autoGenerate = false)
+    var id: Long? = 1
 )
 
 data class Goal(

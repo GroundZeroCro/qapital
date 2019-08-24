@@ -1,11 +1,12 @@
 package com.groundzero.qapital.ui.details
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.groundzero.qapital.data.details.Detail
-import com.groundzero.qapital.data.details.Details
-import com.groundzero.qapital.data.details.DetailsRepository
+import com.groundzero.qapital.data.remote.details.Detail
+import com.groundzero.qapital.data.remote.details.Details
+import com.groundzero.qapital.data.remote.details.DetailsRepository
 import com.groundzero.qapital.data.response.Response
 import com.groundzero.qapital.utils.secondsInDay
 import com.groundzero.qapital.utils.secondsPassed
@@ -34,9 +35,12 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewM
     private fun getDetailsFeed(detailsObserver: Single<Details>): Disposable {
         return detailsObserver
             .subscribeOn(Schedulers.io())
-            .doOnError { e -> details.value = Response.error(e.fillInStackTrace()) }
+            .doOnError { e -> Log.e("errors", e.message) }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { response -> details.value = Response.success(response.details) }
+            .subscribe(
+                { response -> details.value = Response.success(response.details) },
+                { throwable -> details.value = Response.error(throwable) }
+            )
     }
 
     private fun getWeeklyEarningsObserver(detailsObserver: Single<Details>): Disposable {
@@ -48,7 +52,7 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewM
                     .sum()
             }
             .subscribeOn(Schedulers.io())
-            .doOnError { weekEarnings.value = 0.0f }
+            .doOnError { e -> Log.e("errors", e.message) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { weekEarnings -> this.weekEarnings.value = weekEarnings },
@@ -64,7 +68,7 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewM
                     .sum()
             }
             .subscribeOn(Schedulers.io())
-            .doOnError { totalEarnings.value = 0.0f }
+            .doOnError { e -> Log.e("errors", e.message) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { totalEarnings -> onSuccessTotalEarnings(totalEarnings) },

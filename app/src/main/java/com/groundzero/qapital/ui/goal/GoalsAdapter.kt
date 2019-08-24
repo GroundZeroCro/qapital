@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.groundzero.qapital.R
-import com.groundzero.qapital.data.goal.Goal
+import com.groundzero.qapital.data.remote.goal.Goal
 import com.groundzero.qapital.utils.toCurrency
 import com.squareup.picasso.Picasso
 

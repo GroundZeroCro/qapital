@@ -1,9 +1,9 @@
 package com.groundzero.qapital.ui
 
 import com.groundzero.qapital.base.BaseViewModelTest
-import com.groundzero.qapital.data.details.Detail
-import com.groundzero.qapital.data.details.Details
-import com.groundzero.qapital.data.details.DetailsRepository
+import com.groundzero.qapital.data.remote.details.Detail
+import com.groundzero.qapital.data.remote.details.Details
+import com.groundzero.qapital.data.remote.details.DetailsRepository
 import com.groundzero.qapital.ui.details.DetailsViewModel
 import com.groundzero.qapital.utils.ExtensionsTest
 import io.reactivex.Single
@@ -15,7 +15,6 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.anyInt
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)

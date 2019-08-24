@@ -1,6 +1,5 @@
 package com.groundzero.qapital.ui.details
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.groundzero.qapital.R
 import com.groundzero.qapital.base.BaseFragment
-import com.groundzero.qapital.data.goal.Goal
+import com.groundzero.qapital.data.remote.goal.Goal
 import com.groundzero.qapital.data.response.Status
 import com.groundzero.qapital.utils.toCurrency
 import kotlinx.android.synthetic.main.fragment_details.*

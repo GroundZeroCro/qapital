@@ -1,12 +1,11 @@
 package com.groundzero.qapital.ui
 
 import com.groundzero.qapital.base.BaseViewModelTest
-import com.groundzero.qapital.data.goal.Goal
-import com.groundzero.qapital.data.goal.GoalRepository
-import com.groundzero.qapital.data.goal.Goals
+import com.groundzero.qapital.data.remote.goal.Goal
+import com.groundzero.qapital.data.remote.goal.GoalRepository
+import com.groundzero.qapital.data.remote.goal.Goals
 import com.groundzero.qapital.data.response.Response
 import com.groundzero.qapital.ui.goal.GoalViewModel
-import com.groundzero.qapital.utils.responseDateFormat
 import io.reactivex.Single
 import junit.framework.Assert.assertEquals
 import org.junit.Before
@@ -14,7 +13,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -43,6 +41,6 @@ class GoalViewModelTest : BaseViewModelTest() {
     fun `fetched data size should be equal to live data value size`() {
         val goals = Goals(mutableListOf(goal, goal, goal))
         `when`(goalRepository.getGoals()).thenReturn(Single.just(goals))
-        assertEquals("Is equal", goalViewModel.getGoals().value!!.listData!!.size, 3)
+        assertEquals("Is equal", goalViewModel.getRemoteGoals().value!!.listData!!.size, 3)
     }
 }

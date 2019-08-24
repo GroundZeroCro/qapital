@@ -1,4 +1,4 @@
-package com.groundzero.qapital.data.goal
+package com.groundzero.qapital.data.remote.goal
 
 import io.reactivex.Single
 import retrofit2.http.GET

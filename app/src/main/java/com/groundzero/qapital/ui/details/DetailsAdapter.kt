@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.groundzero.qapital.R
-import com.groundzero.qapital.data.details.Detail
+import com.groundzero.qapital.data.remote.details.Detail
 import com.groundzero.qapital.utils.toCurrency
 import com.groundzero.qapital.utils.toSpanned
 import com.groundzero.qapital.utils.toTimestamp
