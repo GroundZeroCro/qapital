@@ -13,7 +13,6 @@ import com.groundzero.qapital.data.response.Response
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Singleton
 
 class GoalViewModel(
     private val goalRepository: GoalRepository,
@@ -33,18 +32,18 @@ class GoalViewModel(
             .doOnError { e -> Log.e("errors", e.message) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { response -> setAndCacheFetchedData(response) },
-                { throwable -> setCachedData(throwable) }
+                { response -> setRemoteLiveDataAndCacheData(response) },
+                { throwable -> setCachedLiveData(throwable) }
             )
         return goals
     }
 
-    fun setAndCacheFetchedData(response: Goals) {
+    fun setRemoteLiveDataAndCacheData(response: Goals) {
         goals.value = Response.success(response.savingsGoals)
         cacheData(response)
     }
 
-    fun setCachedData(throwable: Throwable?) {
+    fun setCachedLiveData(throwable: Throwable?) {
         val cachedGoals: Goals? = getCachedData(null)
         if (cachedGoals != null) goals.value = Response.success(cachedGoals.savingsGoals)
         else goals.value = Response.error(throwable!!)

@@ -54,7 +54,7 @@ class GoalViewModelTest : BaseViewModelTest() {
     @Test
     fun `on goals remote fetch error cached data should be fetched if cache is not null`() {
         `when`(goalDao.getGoals()).thenReturn(goals)
-        goalViewModel.setCachedData(Throwable())
+        goalViewModel.setCachedLiveData(Throwable())
         verify(goalDao, times(1)).getGoals()
     }
 }
