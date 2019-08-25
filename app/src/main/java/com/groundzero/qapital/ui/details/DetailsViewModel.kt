@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.groundzero.qapital.data.cache.Cache
+import com.groundzero.qapital.data.persistence.details.DetailsDao
 import com.groundzero.qapital.data.remote.details.Detail
 import com.groundzero.qapital.data.remote.details.Details
 import com.groundzero.qapital.data.remote.details.DetailsRepository
@@ -16,7 +18,14 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewModel() {
+class DetailsViewModel(
+    private val detailsRepository: DetailsRepository,
+    private val detailsDao: DetailsDao
+) : ViewModel(), Cache<Details> {
+
+    override fun getCachedData(id: Int?): Details? {
+        return detailsDao.getDetails(id!!)
+    }
 
     private var disposable = CompositeDisposable()
     private val details = MutableLiveData<Response<Detail>>()
@@ -26,20 +35,20 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewM
     fun getDetails(goalId: Int): LiveData<Response<Detail>> {
         details.value = Response.loading()
         val detailsObserver: Single<Details> = detailsRepository.getDetails(goalId)
-        disposable.add(getDetailsFeed(detailsObserver))
+        disposable.add(getDetailsFeed(goalId, detailsObserver))
         disposable.add(getWeeklyEarningsObserver(detailsObserver))
         disposable.add(getTotalEarningsObserver(detailsObserver))
         return details
     }
 
-    private fun getDetailsFeed(detailsObserver: Single<Details>): Disposable {
+    private fun getDetailsFeed(goalId: Int, detailsObserver: Single<Details>): Disposable {
         return detailsObserver
             .subscribeOn(Schedulers.io())
             .doOnError { e -> Log.e("errors", e.message) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { response -> details.value = Response.success(response.details) },
-                { throwable -> details.value = Response.error(throwable) }
+                { response -> setAndCacheFetchedData(goalId, response) },
+                { throwable -> setCachedData(goalId, throwable) }
             )
     }
 
@@ -75,6 +84,22 @@ class DetailsViewModel(private val detailsRepository: DetailsRepository) : ViewM
                 { onErrorTotalEarnings() }
             )
     }
+
+    fun setAndCacheFetchedData(goalId: Int, response: Details) {
+        details.value = Response.success(response.details)
+        cacheData(response.apply { id = goalId })
+    }
+
+    fun setCachedData(goalId: Int, throwable: Throwable?) {
+        val cachedGoals: Details? = getCachedData(goalId)
+        if (cachedGoals != null) details.value = Response.success(cachedGoals.details)
+        else details.value = Response.error(throwable!!)
+    }
+
+    override fun cacheData(details: Details) {
+        detailsDao.addDetail(details)
+    }
+
 
     /**
      * Earnings text and progress bar are being animated.

@@ -1,8 +1,13 @@
 package com.groundzero.qapital.data.remote.details
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "details")
 data class Details(
+    @PrimaryKey
+    var id: Int,
     @SerializedName("feed")
     var details: List<Detail>
 )

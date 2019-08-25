@@ -34,24 +34,24 @@ class GoalViewModel(
             .doOnError { e -> Log.e("errors", e.message) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { response -> onGoalsFetchSuccess(response) },
-                { throwable: Throwable? -> onGoalsFetchError(throwable) }
+                { response -> setAndCacheFetchedData(response) },
+                { throwable -> setCachedData(throwable) }
             )
         return goals
     }
 
-    fun onGoalsFetchSuccess(response: Goals) {
+    fun setAndCacheFetchedData(response: Goals) {
         goals.value = Response.success(response.savingsGoals)
-        cacheData(Goals(response.savingsGoals))
+        cacheData(response)
     }
 
-    fun onGoalsFetchError(throwable: Throwable?) {
-        val cachedGoals: Goals? = getCachedData()
+    fun setCachedData(throwable: Throwable?) {
+        val cachedGoals: Goals? = getCachedData(null)
         if (cachedGoals != null) goals.value = Response.success(cachedGoals.savingsGoals)
         else goals.value = Response.error(throwable!!)
     }
 
-    override fun getCachedData(): Goals? {
+    override fun getCachedData(id: Int?): Goals? {
         return goalDao.getGoals()
     }
 

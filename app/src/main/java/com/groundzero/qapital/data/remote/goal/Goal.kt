@@ -7,6 +7,11 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.squareup.picasso.Picasso
 
+/**
+ * Goals are being stored into database since complete
+ * database is stored and fetched from database in one go,
+ * and no single Goal is being stored, modified, deleted or fetched
+ */
 @Entity(tableName = "goals")
 data class Goals(
     @SerializedName("savingsGoals")
