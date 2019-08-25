@@ -36,8 +36,6 @@ class DetailsViewModel(
         details.value = Response.loading()
         val detailsObserver: Single<Details> = detailsRepository.getDetails(goalId)
         disposable.add(getDetailsFeed(goalId, detailsObserver))
-        disposable.add(getWeeklyEarningsObserver(detailsObserver))
-        disposable.add(getTotalEarningsObserver(detailsObserver))
         return details
     }
 
@@ -47,50 +45,17 @@ class DetailsViewModel(
             .doOnError { e -> Log.e("errors", e.message) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { response -> setAndCacheFetchedData(goalId, response) },
-                { throwable -> setCachedData(goalId, throwable) }
+                { response -> setRemoteLiveDataAndCacheData(goalId, response) },
+                { throwable -> setCachedLiveData(goalId, throwable) }
             )
     }
 
-    private fun getWeeklyEarningsObserver(detailsObserver: Single<Details>): Disposable {
-        return detailsObserver
-            .map { details: Details ->
-                details.details
-                    .filter { detail: Detail -> detail.timestamp.secondsPassed() < secondsInDay * 7 }
-                    .map { detail -> detail.amount }
-                    .sum()
-            }
-            .subscribeOn(Schedulers.io())
-            .doOnError { e -> Log.e("errors", e.message) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { weekEarnings -> this.weekEarnings.value = weekEarnings },
-                { this.weekEarnings.value = 0.0f }
-            )
-    }
-
-    private fun getTotalEarningsObserver(detailsObserver: Single<Details>): Disposable {
-        return detailsObserver
-            .map { t: Details ->
-                t.details
-                    .map { detail -> detail.amount }
-                    .sum()
-            }
-            .subscribeOn(Schedulers.io())
-            .doOnError { e -> Log.e("errors", e.message) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { totalEarnings -> onSuccessTotalEarnings(totalEarnings) },
-                { onErrorTotalEarnings() }
-            )
-    }
-
-    fun setAndCacheFetchedData(goalId: Int, response: Details) {
+    fun setRemoteLiveDataAndCacheData(goalId: Int, response: Details) {
         details.value = Response.success(response.details)
         cacheData(response.apply { id = goalId })
     }
 
-    fun setCachedData(goalId: Int, throwable: Throwable?) {
+    fun setCachedLiveData(goalId: Int, throwable: Throwable?) {
         val cachedGoals: Details? = getCachedData(goalId)
         if (cachedGoals != null) details.value = Response.success(cachedGoals.details)
         else details.value = Response.error(throwable!!)
@@ -100,26 +65,24 @@ class DetailsViewModel(
         detailsDao.addDetail(t)
     }
 
+    fun setWeeklyEarningsLiveData(details: List<Detail>) {
+        this.weekEarnings.value =
+            details.filter { detail: Detail -> detail.timestamp.secondsPassed() < secondsInDay * 7 }
+                .map { detail -> detail.amount }
+                .sum()
+    }
 
-    /**
-     * Earnings text and progress bar are being animated.
-     */
-    private fun onSuccessTotalEarnings(totalEarnings: Float) {
+    // I have used another thread to make the text and progression bar animate
+    fun setTotalEarningsLiveData(details: List<Detail>) {
+        val total = details.map { detail -> detail.amount }.sum()
         Thread {
             var earningsIterator = 0.0f
-            for (x in 0..totalEarnings.toInt()) {
-                Thread.sleep(30)
+            for (x in 0..total.toInt()) {
+                Thread.sleep(15)
                 this.totalEarnings.postValue(earningsIterator++)
             }
+            this.totalEarnings.postValue(total)
         }.start()
-    }
-
-    private fun onErrorTotalEarnings() {
-        this.totalEarnings.value = 0.0f
-    }
-
-    fun getTotalEarningsProgression(totalEarnings: Float, targetEarnings: Float): Int {
-        return ((totalEarnings / targetEarnings) * 100).toInt()
     }
 
     fun getWeekEarnings(): LiveData<Float> {
@@ -128,6 +91,10 @@ class DetailsViewModel(
 
     fun getTotalEarnings(): LiveData<Float> {
         return totalEarnings
+    }
+
+    fun getTotalEarningsProgression(totalEarnings: Float, targetEarnings: Float): Int {
+        return ((totalEarnings / targetEarnings) * 100).toInt()
     }
 
     override fun onCleared() {

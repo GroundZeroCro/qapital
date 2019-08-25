@@ -56,6 +56,8 @@ class DetailsFragment : BaseFragment() {
                         Status.SUCCESS -> {
                             detailsAdapter.updateRecyclerView(response.listData!!)
                             activityCallback.changeProgressBarVisibility(false)
+                            detailsViewModel.setWeeklyEarningsLiveData(response.listData)
+                            detailsViewModel.setTotalEarningsLiveData(response.listData)
                         }
                         Status.ERROR -> {
                             Toast.makeText(
@@ -76,7 +78,11 @@ class DetailsFragment : BaseFragment() {
 
         detailsViewModel.getTotalEarnings()
             .observe(viewLifecycleOwner, Observer { totalEarnings ->
-                details_amount.text = resources.getString(R.string.details_amount,totalEarnings.toCurrency(), selectedGoal.targetAmount.toCurrency())
+                details_amount.text = resources.getString(
+                    R.string.details_amount,
+                    totalEarnings.toCurrency(),
+                    selectedGoal.targetAmount.toCurrency()
+                )
                 progress.progress = detailsViewModel.getTotalEarningsProgression(
                     totalEarnings,
                     selectedGoal.targetAmount

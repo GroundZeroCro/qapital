@@ -8,6 +8,7 @@ import org.mockito.junit.MockitoJUnitRunner
 
 
 open class BaseViewModelTest {
+
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
