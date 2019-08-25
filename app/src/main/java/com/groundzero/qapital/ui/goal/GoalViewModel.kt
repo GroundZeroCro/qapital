@@ -15,7 +15,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Singleton
 
-@Singleton
 class GoalViewModel(
     private val goalRepository: GoalRepository,
     private val goalDao: GoalDao

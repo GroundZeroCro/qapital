@@ -96,8 +96,8 @@ class DetailsViewModel(
         else details.value = Response.error(throwable!!)
     }
 
-    override fun cacheData(details: Details) {
-        detailsDao.addDetail(details)
+    override fun cacheData(t: Details) {
+        detailsDao.addDetail(t)
     }
 
 

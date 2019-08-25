@@ -1,6 +1,7 @@
 package com.groundzero.qapital.ui
 
 import com.groundzero.qapital.base.BaseViewModelTest
+import com.groundzero.qapital.data.persistence.details.DetailsDao
 import com.groundzero.qapital.data.remote.details.Detail
 import com.groundzero.qapital.data.remote.details.Details
 import com.groundzero.qapital.data.remote.details.DetailsRepository
@@ -22,6 +23,8 @@ class DetailsViewModelTest : BaseViewModelTest() {
 
     @Mock
     lateinit var detailsRepository: DetailsRepository
+    @Mock
+    lateinit var detailsDao: DetailsDao
     private lateinit var detailsViewModel: DetailsViewModel
     private val detail = Detail(
         "", "", "", "", 0.0f, 0, 0
@@ -29,14 +32,14 @@ class DetailsViewModelTest : BaseViewModelTest() {
 
     @Before
     fun setUp() {
-        detailsViewModel = DetailsViewModel(detailsRepository)
+        detailsViewModel = DetailsViewModel(detailsRepository, detailsDao)
     }
 
     @Test
     fun `fetched data size should be equal to live data value size`() {
         // Getting date formatted from more then a week old date
         detail.timestamp = ExtensionsTest.getDateFormatted(10000000)
-        val details = Details(mutableListOf(detail, detail))
+        val details = Details(1, mutableListOf(detail, detail))
         `when`(detailsRepository.getDetails(ArgumentMatchers.anyInt())).thenReturn(
             Single.just(
                 details
@@ -52,7 +55,7 @@ class DetailsViewModelTest : BaseViewModelTest() {
         // Formatted date from 59 seconds past
         detail.timestamp = ExtensionsTest.getDateFormatted(59)
         detail.amount = 2.0f
-        val details = Details(mutableListOf(detail, detail))
+        val details = Details(1, mutableListOf(detail, detail))
         `when`(detailsRepository.getDetails(ArgumentMatchers.anyInt())).thenReturn(
             Single.just(
                 details
