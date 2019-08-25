@@ -1,16 +1,13 @@
 package com.groundzero.qapital.data
 
-import android.content.Context
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.groundzero.qapital.base.DaoBaseTest
-import com.groundzero.qapital.data.persistence.PersistenceDatabase
 import com.groundzero.qapital.data.persistence.details.DetailsDao
 import com.groundzero.qapital.data.remote.details.Detail
 import com.groundzero.qapital.data.remote.details.Details
 import com.groundzero.qapital.utils.responseDateFormat
+import junit.framework.Assert.assertTrue
 import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
@@ -20,7 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
-class DetailsDaoTest: DaoBaseTest() {
+class DetailsDaoTest : DaoBaseTest() {
 
     private lateinit var detailsDao: DetailsDao
     private val detail =
@@ -41,6 +38,7 @@ class DetailsDaoTest: DaoBaseTest() {
     fun writeUserAndReadInList() {
         detailsDao.addDetail(details)
         ViewMatchers.assertThat(detailsDao.getDetails(0).details[0], CoreMatchers.equalTo(detail))
+        assertTrue(detailsDao.getDetails(0).details.size == details.details.size)
     }
 
     companion object {
