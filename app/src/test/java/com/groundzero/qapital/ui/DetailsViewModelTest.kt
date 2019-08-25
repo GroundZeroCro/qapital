@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -29,6 +30,7 @@ class DetailsViewModelTest : BaseViewModelTest() {
     private val detail = Detail(
         "", "", "", "", 0.0f, 0, 0
     )
+    val details: List<Detail> = mutableListOf(detail, detail)
 
     @Before
     fun setUp() {
@@ -54,8 +56,7 @@ class DetailsViewModelTest : BaseViewModelTest() {
     fun `fetch past week earnings should be equal`() {
         detail.timestamp = ExtensionsTest.getDateFormatted(59)
         detail.amount = 2.0f
-        val details = Details(1, mutableListOf(detail, detail))
-        detailsViewModel.setWeeklyEarningsLiveData(details.details)
+        detailsViewModel.setWeeklyEarningsLiveData(details)
         assertEquals(
             "Is same value",
             4.0f,
@@ -79,5 +80,11 @@ class DetailsViewModelTest : BaseViewModelTest() {
         assertFalse(
             detailsViewModel.getTotalEarningsProgression(30.0f, 100.0f) == 31
         )
+    }
+
+    @Test
+    fun `requesting cached goals should run dao query`() {
+        detailsViewModel.setCachedLiveData(1, Throwable())
+        Mockito.verify(detailsDao).getDetails(1)
     }
 }
