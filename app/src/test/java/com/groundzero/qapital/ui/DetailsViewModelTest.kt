@@ -52,16 +52,10 @@ class DetailsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `fetch past week earnings should be equal`() {
-        // Formatted date from 59 seconds past
         detail.timestamp = ExtensionsTest.getDateFormatted(59)
         detail.amount = 2.0f
         val details = Details(1, mutableListOf(detail, detail))
-        `when`(detailsRepository.getDetails(ArgumentMatchers.anyInt())).thenReturn(
-            Single.just(
-                details
-            )
-        )
-        detailsViewModel.getDetails(ArgumentMatchers.anyInt())
+        detailsViewModel.setWeeklyEarningsLiveData(details.details)
         assertEquals(
             "Is same value",
             4.0f,

@@ -57,4 +57,18 @@ class GoalViewModelTest : BaseViewModelTest() {
         goalViewModel.setCachedLiveData(Throwable())
         verify(goalDao, times(1)).getGoals()
     }
+
+    @Test
+    fun `requesting cached goals should run dao query`() {
+        `when`(goalDao.getGoals()).thenReturn(goals)
+        goalViewModel.setCachedLiveData(Throwable())
+        verify(goalDao).getGoals()
+    }
+
+    @Test
+    fun `storing cached data should run dao insert`() {
+        `when`(goalDao.addGoals(goals)).then { it.mock }
+        goalViewModel.setRemoteLiveDataAndCacheData(goals)
+        verify(goalDao).addGoals(goals)
+    }
 }

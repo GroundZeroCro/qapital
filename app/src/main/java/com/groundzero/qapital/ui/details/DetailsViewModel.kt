@@ -74,13 +74,15 @@ class DetailsViewModel(
 
     // I have used another thread to make the text and progression bar animate
     fun setTotalEarningsLiveData(details: List<Detail>) {
-        val total = details.map { detail -> detail.amount }.sum()
+        val total: Float = details.map { detail -> detail.amount }.sum()
         Thread {
             var earningsIterator = 0.0f
             for (x in 0..total.toInt()) {
                 Thread.sleep(15)
+                // Setting rounded integers
                 this.totalEarnings.postValue(earningsIterator++)
             }
+            // Setting final float
             this.totalEarnings.postValue(total)
         }.start()
     }
