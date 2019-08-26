@@ -7,6 +7,7 @@ import com.groundzero.qapital.data.remote.details.Details
 import com.groundzero.qapital.data.remote.details.DetailsRepository
 import com.groundzero.qapital.ui.details.DetailsViewModel
 import com.groundzero.qapital.utils.ExtensionsTest
+import com.groundzero.qapital.utils.NetworkUtils
 import io.reactivex.Single
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -26,6 +27,8 @@ class DetailsViewModelTest : BaseViewModelTest() {
     lateinit var detailsRepository: DetailsRepository
     @Mock
     lateinit var detailsDao: DetailsDao
+    @Mock
+    lateinit var networkUtils: NetworkUtils
     private lateinit var detailsViewModel: DetailsViewModel
     private val detail = Detail(
         "", "", "", "", 0.0f, 0, 0
@@ -34,7 +37,7 @@ class DetailsViewModelTest : BaseViewModelTest() {
 
     @Before
     fun setUp() {
-        detailsViewModel = DetailsViewModel(detailsRepository, detailsDao)
+        detailsViewModel = DetailsViewModel(detailsRepository, detailsDao, networkUtils)
     }
 
     @Test
@@ -48,6 +51,7 @@ class DetailsViewModelTest : BaseViewModelTest() {
             )
         )
         detailsViewModel.getDetails(1)
+        `when`(networkUtils.isNetworkConnected()).thenReturn(true)
         assertEquals("Is equal", 2, detailsViewModel.getDetails(1).value!!.listData!!.size)
         detail.timestamp = ""
     }

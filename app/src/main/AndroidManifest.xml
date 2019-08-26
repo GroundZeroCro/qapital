@@ -4,6 +4,8 @@
           xmlns:tools="http://schemas.android.com/tools" package="com.groundzero.qapital">
 
     <dist:module dist:instant="true"/>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application

@@ -10,13 +10,15 @@ import com.groundzero.qapital.data.remote.goal.Goal
 import com.groundzero.qapital.data.remote.goal.GoalRepository
 import com.groundzero.qapital.data.remote.goal.Goals
 import com.groundzero.qapital.data.response.Response
+import com.groundzero.qapital.utils.NetworkUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class GoalViewModel(
     private val goalRepository: GoalRepository,
-    private val goalDao: GoalDao
+    private val goalDao: GoalDao,
+    private val networkUtils: NetworkUtils
 ) : ViewModel(), Cache<Goals> {
 
     private val goals = MutableLiveData<Response<Goal>>()
@@ -25,16 +27,20 @@ class GoalViewModel(
 
     fun getRemoteGoals(): LiveData<Response<Goal>> {
 
-        goals.value = Response.loading()
+                goals.value = Response.loading()
 
-        disposable = goalRepository.getGoals()
-            .subscribeOn(Schedulers.io())
-            .doOnError { e -> Log.e("errors", e.message) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { response -> setRemoteLiveDataAndCacheData(response) },
-                { throwable -> setCachedLiveData(throwable) }
-            )
+                if (networkUtils.isNetworkConnected()) {
+                    disposable = goalRepository.getGoals()
+                        .subscribeOn(Schedulers.io())
+                        .doOnError { e -> Log.e("errors", e.message) }
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                            { response -> setRemoteLiveDataAndCacheData(response) },
+                            { throwable -> setCachedLiveData(throwable) }
+                        )
+                } else {
+                    setCachedLiveData(Throwable())
+        }
         return goals
     }
 

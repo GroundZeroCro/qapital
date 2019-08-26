@@ -10,6 +10,7 @@ import com.groundzero.qapital.data.remote.details.Detail
 import com.groundzero.qapital.data.remote.details.Details
 import com.groundzero.qapital.data.remote.details.DetailsRepository
 import com.groundzero.qapital.data.response.Response
+import com.groundzero.qapital.utils.NetworkUtils
 import com.groundzero.qapital.utils.secondsInDay
 import com.groundzero.qapital.utils.secondsPassed
 import io.reactivex.Single
@@ -20,12 +21,9 @@ import io.reactivex.schedulers.Schedulers
 
 class DetailsViewModel(
     private val detailsRepository: DetailsRepository,
-    private val detailsDao: DetailsDao
+    private val detailsDao: DetailsDao,
+    private val networkUtils: NetworkUtils
 ) : ViewModel(), Cache<Details> {
-
-    override fun getCachedData(id: Int?): Details? {
-        return detailsDao.getDetails(id!!)
-    }
 
     private var disposable = CompositeDisposable()
     private val details = MutableLiveData<Response<Detail>>()
@@ -35,7 +33,13 @@ class DetailsViewModel(
     fun getDetails(goalId: Int): LiveData<Response<Detail>> {
         details.value = Response.loading()
         val detailsObserver: Single<Details> = detailsRepository.getDetails(goalId)
-        disposable.add(getDetailsFeed(goalId, detailsObserver))
+
+        if (networkUtils.isNetworkConnected()) {
+            disposable.add(getDetailsFeed(goalId, detailsObserver))
+        } else {
+            setCachedLiveData(goalId, Throwable())
+        }
+
         return details
     }
 
@@ -59,6 +63,10 @@ class DetailsViewModel(
         val cachedGoals: Details? = getCachedData(goalId)
         if (cachedGoals != null) details.value = Response.success(cachedGoals.details)
         else details.value = Response.error(throwable!!)
+    }
+
+    override fun getCachedData(id: Int?): Details? {
+        return detailsDao.getDetails(id!!)
     }
 
     override fun cacheData(t: Details) {
