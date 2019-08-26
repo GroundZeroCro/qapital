@@ -8,8 +8,8 @@ import com.groundzero.qapital.data.remote.details.DetailsRepository
 import com.groundzero.qapital.ui.details.DetailsViewModel
 import com.groundzero.qapital.utils.ExtensionsTest
 import io.reactivex.Single
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

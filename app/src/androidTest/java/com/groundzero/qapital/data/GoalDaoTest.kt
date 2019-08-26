@@ -6,9 +6,9 @@ import com.groundzero.qapital.base.DaoBaseTest
 import com.groundzero.qapital.data.persistence.goal.GoalDao
 import com.groundzero.qapital.data.remote.goal.Goal
 import com.groundzero.qapital.data.remote.goal.Goals
-import junit.framework.Assert.assertTrue
 import org.hamcrest.CoreMatchers
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
